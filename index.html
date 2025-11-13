@@ -4,6 +4,77 @@
     <meta charset="UTF-g">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portfolio Website</title>
+
+    <!-- Firebase SDKs -->
+    <script type="module">
+        // These global variables are provided by the environment
+        const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
+        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+
+        // Initialize Firebase
+        if (firebaseConfig && Object.keys(firebaseConfig).length > 0) {
+            try {
+                const { initializeApp } = await import("https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js");
+                const { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, signOut } = await import("https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js");
+                const { getFirestore, doc, addDoc, onSnapshot, collection, query, limit, setLogLevel, getDocs, orderBy, serverTimestamp, deleteDoc } = await import("https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js");
+
+                const app = initializeApp(firebaseConfig);
+                const auth = getAuth(app);
+                const db = getFirestore(app);
+                
+                // setLogLevel('debug');
+
+                // Make db and auth globally available to other scripts
+                window.firebaseServices = { 
+                    auth, db, signInAnonymously, signInWithCustomToken, onAuthStateChanged, 
+                    doc, addDoc, onSnapshot, collection, query, limit, getDocs, orderBy, 
+                    serverTimestamp, deleteDoc, appId, GoogleAuthProvider, signInWithPopup, signOut
+                };
+                
+                // This token is a special auth token for the app owner (admin)
+                const isAdminToken = !!initialAuthToken;
+                window.isAdmin = isAdminToken; // Expose admin status globally
+
+                // Handle initial authentication
+                if (auth) {
+                    await auth.signOut(); // Sign out existing user if any
+                    if (initialAuthToken) {
+                        // Admin user signs in with the special token
+                        await signInWithCustomToken(auth, initialAuthToken);
+                    } else {
+                        // Regular visitor signs in anonymously for now
+                        await signInAnonymously(auth);
+                    }
+                }
+                
+                // Signal that Firebase is ready
+                document.dispatchEvent(new Event('firebase-ready'));
+
+            } catch (error) {
+                console.error("Firebase initialization failed:", error);
+                const testimonialsGrid = document.getElementById('testimonials-grid');
+                if (testimonialsGrid) {
+                    testimonialsGrid.innerHTML = '<p class="text-center text-red-500">Failed to load testimonials. Check console for errors.</p>';
+                } else {
+                    document.addEventListener('DOMContentLoaded', () => {
+                        const testimonialsGrid = document.getElementById('testimonials-grid');
+                        if (testimonialsGrid) {
+                             testimonialsGrid.innerHTML = '<p class="text-center text-red-500">Failed to load testimonials. Check console for errors.</p>';
+                        }
+                    });
+                }
+            }
+        } else {
+            console.warn("Firebase config is missing.");
+            document.addEventListener('DOMContentLoaded', () => {
+                const testimonialsGrid = document.getElementById('testimonials-grid');
+                if (testimonialsGrid) {
+                    testimonialsGrid.innerHTML = '<p class="text-center text-yellow-500">Testimonials are offline. Firebase config is missing.</p>';
+                }
+            });
+        }
+    </script>
     
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -320,6 +391,7 @@
             <div class="px-2 pt-2 pb-3 space-y-1">
                 <a href="#about" class="text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-800 hover:text-indigo-600 dark:hover:text-indigo-400 block px-3 py-2 rounded-md text-base font-medium transition-colors duration-300 ease-in-out">About</a>
                 <a href="#projects" class="text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-800 hover:text-indigo-600 dark:hover:text-indigo-400 block px-3 py-2 rounded-md text-base font-medium transition-colors duration-300 ease-in-out">Projects</a>
+                <a href="#testimonials" class="text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-800 hover:text-indigo-600 dark:hover:text-indigo-400 block px-3 py-2 rounded-md text-base font-medium transition-colors duration-300 ease-in-out">Testimonials</a>
                 <a href="#contact" class="text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-800 hover:text-indigo-600 dark:hover:text-indigo-400 block px-3 py-2 rounded-md text-base font-medium transition-colors duration-300 ease-in-out">Contact</a>
             </div>
         </div>

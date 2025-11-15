@@ -401,15 +401,20 @@
     <main class="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 
         <!-- ====== Hero Section ====== -->
-        <section id="home" class="min-h-screen flex items-center pt-16 overflow-hidden">
-    <div class="hero-inner grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+        <section id="home" class="flex items-center pt-24 pb-16 md:pt-16 md:min-h-screen overflow-hidden">
+    <div class="hero-inner container mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 items-center">
 
-        <div class="hero-copy z-20 text-left">
-            <h1 class="text-6xl sm:text-7xl font-extrabold text-white">Hi, I'm Aadith</h1>
+        <div class="hero-copy z-20 text-center md:text-left order-last md:order-first">
             
-            <p class="mt-4 text-lg opacity-90">Ultra creative visuals, 3D composition & brand systems — crafted with thought and motion.</p>
+            <h1 class="text-5xl md:text-7xl font-extrabold text-white">
+                Hi, I'm <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-600">Aadith.</span>
+            </h1>
             
-            <div class="animate-on-scroll delay-200 mt-10 flex flex-col sm:flex-row items-start gap-4">
+            <p class="mt-4 text-lg opacity-90">
+                I design brands that move and feel alive. With 3D composition & brand systems — crafted with thought and motion.
+            </p>
+            
+            <div class="animate-on-scroll delay-200 mt-10 flex flex-col sm:flex-row items-center justify-center md:justify-start gap-4">
                 <a href="#projects" class="inline-block bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold py-3 px-6 rounded-lg shadow-lg transform transition-all duration-300 hover:scale-105 hover:shadow-xl">
                     View My Work
                 </a>
@@ -419,18 +424,17 @@
             </div>
         </div>
 
-        <div class="z-10 flex justify-center">
+        <div class="z-10 flex justify-center order-first md:order-last">
             <lottie-player 
               src="assets/Pen_tool_animation.json" 
               background="transparent" 
               speed="1" 
-              style="width: 450px; height: 450px;  filter: invert(1);" 
+              style="width: 240px; height: 240px; filter: invert(1); transform: rotate(-10deg);" 
               loop 
               autoplay>
             </lottie-player>
+            </div>
         </div>
-
-    </div>
 </section>
         
 
